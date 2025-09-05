@@ -1,7 +1,5 @@
 package com.miniproject.qr_generator.controller;
 
-import java.io.InputStream;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public class QrCodeController {
     @PostMapping("/generate")
     public ResponseEntity<byte[]> generateQr(@RequestBody QrRequest request) {
         try {
-            // Build vCard string (without email)
+            // Build vCard string
             String vCard = "BEGIN:VCARD\n" +
                     "VERSION:3.0\n" +
                     "FN:" + request.getName() + "\n" +
@@ -34,10 +32,8 @@ public class QrCodeController {
                     "NOTE:Bike Number: " + request.getBikeNumber() + "\n" +
                     "END:VCARD";
 
-            // Load logo (optional, for center image)
-            InputStream logoStream = getClass().getResourceAsStream("/static/logo.png");
-
-            byte[] qrImage = qrCodeService.generateQrWithLogo(vCard, logoStream, 400, 400);
+            // No logo needed → just generate QR
+            byte[] qrImage = qrCodeService.generateQrWithLogo(vCard, null, 400, 400);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=qr.png")
@@ -45,9 +41,8 @@ public class QrCodeController {
                     .body(qrImage);
 
         } catch (Exception e) {
+            e.printStackTrace(); // will show real cause in Render logs
             return ResponseEntity.status(500).body(null);
         }
     }
 }
-
-
