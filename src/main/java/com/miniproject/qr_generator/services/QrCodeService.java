@@ -1,6 +1,5 @@
 package com.miniproject.qr_generator.services;
 
-
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -31,8 +30,18 @@ public class QrCodeService {
         // Create QR code image
         BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(matrix, new MatrixToImageConfig());
 
-        // Read and scale logo
+        // ✅ If logo is not provided, return plain QR
+        if (logoStream == null) {
+            return bufferedImageToBytes(qrImage);
+        }
+
+        // Try reading logo
         BufferedImage logo = ImageIO.read(logoStream);
+        if (logo == null) {
+            return bufferedImageToBytes(qrImage); // fallback: return plain QR
+        }
+
+        // Scale logo
         int logoWidth = qrImage.getWidth() / 5;
         int logoHeight = qrImage.getHeight() / 5;
 
@@ -46,10 +55,12 @@ public class QrCodeService {
         g.drawImage(logo, x, y, logoWidth, logoHeight, null);
         g.dispose();
 
-        // Convert to byte[]
+        return bufferedImageToBytes(qrImage);
+    }
+
+    private byte[] bufferedImageToBytes(BufferedImage image) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(qrImage, "png", baos);
+        ImageIO.write(image, "png", baos);
         return baos.toByteArray();
     }
 }
-
