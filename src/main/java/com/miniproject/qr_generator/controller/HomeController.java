@@ -13,7 +13,7 @@ public class HomeController {
 	@GetMapping
 	public String getHome()
 	{
-		return "Home controller for QR-generator";
+		return "Home controller for QR-generator Updated";
 	}
 
 }
