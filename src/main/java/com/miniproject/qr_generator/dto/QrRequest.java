@@ -2,12 +2,12 @@ package com.miniproject.qr_generator.dto;
 
 public class QrRequest {
 	private String name;
-    public QrRequest(String name, String bikeNumber, String contactNumber, String logo) {
+    public QrRequest(String name, String bikeNumber, String contactNumber) {
 		super();
 		this.name = name;
 		this.bikeNumber = bikeNumber;
 		this.contactNumber = contactNumber;
-		this.logo = logo;
+//		this.logo = logo;
 	}
     public QrRequest() {}
 	public String getName() {
@@ -28,13 +28,7 @@ public class QrRequest {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-	public String getLogo() {
-		return logo;
-	}
-	public void setLogo(String logo) {
-		this.logo = logo;
-	}
 	private String bikeNumber;
     private String contactNumber;
-    private String logo;
+    //private String logo;
 }
